@@ -1,9 +1,9 @@
-import { Base64Decoder } from "@/components/base64-decoder"
+import { Base64App } from "@/components/base64-app";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
-      <Base64Decoder />
+      <Base64App />
     </main>
-  )
+  );
 }

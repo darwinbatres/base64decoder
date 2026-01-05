@@ -1,25 +1,49 @@
-# Base64 Viewer
+# Base64 Utils
 
-A modern web application for decoding, previewing, and downloading base64 encoded documents.
+A modern web application for encoding, decoding, and previewing base64 files with a clean tabbed interface.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-black)
 ![React](https://img.shields.io/badge/React-19-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![Tailwind](https://img.shields.io/badge/Tailwind-4-38bdf8)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
 ## Features
 
-- **Decode Base64** — Paste any base64 string and instantly decode it
-- **Auto-detect file types** — Automatically detects MIME types including PDF, images, video, audio, JSON, XML, HTML, and text
-- **Preview documents** — View decoded files directly in the browser
-- **PDF viewer** — Full-featured PDF viewing with:
+### 🔓 Decode Base64
+
+- Paste any base64 string and instantly decode it
+- Auto-detect file types from binary signatures
+- Preview decoded files directly in the browser
+- Download decoded files
+
+### 📤 Encode to Base64
+
+- Drag & drop or click to upload any file
+- Get raw base64 or data URI format
+- One-click copy to clipboard
+- Download base64 as text file
+
+### 👁️ File Viewer
+
+- Preview files with coordinate tracking
+- Full-featured PDF viewer with:
   - Page navigation
-  - Zoom controls (25% - 400%)
+  - Zoom controls (50% - 400%)
   - Fullscreen mode
-  - Coordinate tracking on hover (useful for developers working with PDF positioning)
-- **Download files** — Save decoded documents to your device
+  - PDF coordinate overlay (useful for developers)
+- Image viewer with fullscreen support
+- Video and audio playback
+- Syntax-highlighted text/JSON/XML preview
+
+### ✨ User Experience
+
+- **Tabbed interface** — Switch between Decode, Encode, and View modes
 - **Dark/Light mode** — Theme toggle with system preference detection
+- **Privacy-first** — All data cleared when you close the tab
+- **No file size limits** — Browser's natural limits apply
 - **Responsive design** — Works on desktop and mobile
+- **Accessible** — Full keyboard navigation and screen reader support
 
 ## Supported File Types
 
@@ -30,13 +54,14 @@ A modern web application for decoding, previewing, and downloading base64 encode
 | Video  | `.mp4`, `.webm`                                           |
 | Audio  | `.mp3`, `.wav`                                            |
 | Text   | `.json`, `.xml`, `.html`, `.js`, `.txt`                   |
+| Other  | Any file type (download available)                        |
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 20 or higher
-- pnpm (recommended) or npm
+- pnpm (recommended)
 
 ### Installation
 
@@ -64,9 +89,10 @@ pnpm start
 ## Tech Stack
 
 - **Framework**: [Next.js 16](https://nextjs.org/) with Turbopack
-- **UI**: [React 19](https://react.dev/)
+- **UI**: [React 19](https://react.dev/) with Server Components
 - **Styling**: [Tailwind CSS 4](https://tailwindcss.com/) with OKLCH color system
-- **PDF Rendering**: [PDF.js](https://mozilla.github.io/pdf.js/) (loaded from CDN)
+- **Components**: [Radix UI](https://radix-ui.com/) primitives for accessibility
+- **PDF Rendering**: [PDF.js](https://mozilla.github.io/pdf.js/) (CDN)
 - **Icons**: [Lucide React](https://lucide.dev/)
 - **Theme**: [next-themes](https://github.com/pacocoursey/next-themes)
 
@@ -74,19 +100,44 @@ pnpm start
 
 ```
 app/
-  globals.css        # Global styles and design tokens
-  layout.tsx         # Root layout with theme provider
-  page.tsx           # Home page
+  globals.css          # Global styles with OKLCH design tokens
+  layout.tsx           # Root layout with theme provider
+  page.tsx             # Home page
+
 components/
-  base64-decoder.tsx     # Main decoder component
-  document-preview.tsx   # File preview with PDF viewer
-  file-type-indicator.tsx # File type icons
-  theme-provider.tsx     # Theme context wrapper
-  theme-toggle.tsx       # Dark/light mode toggle
-  ui/                    # Reusable UI components
+  base64-app.tsx       # Main app with tabbed navigation
+  base64-decoder.tsx   # Decode tab component
+  file-to-base64.tsx   # Encode tab component
+  file-viewer.tsx      # View tab component
+  file-dropzone.tsx    # Reusable drag & drop component
+  document-preview.tsx # File preview with PDF/image viewers
+  file-type-indicator.tsx
+  theme-provider.tsx
+  theme-toggle.tsx
+  ui/                  # Reusable UI primitives
+    button.tsx
+    card.tsx
+    tabs.tsx
+
 lib/
-  utils.ts           # Utility functions
+  file-utils.ts        # Shared utilities (MIME detection, storage, base64)
+  utils.ts             # Tailwind class utilities
 ```
+
+## Privacy
+
+This application prioritizes your privacy:
+
+- **No server uploads** — All processing happens in your browser
+- **No tracking** — Only Vercel Analytics for basic page views
+- **Auto-cleanup** — All file data is cleared from localStorage when you close the tab
+- **No cookies** — Only theme preference is stored
+
+## Browser Support
+
+- Chrome/Edge 90+
+- Firefox 90+
+- Safari 15+
 
 ## License
 
@@ -94,4 +145,4 @@ MIT
 
 ---
 
-Made with coffee by [@darwinbatres](https://x.com/darwinbatres)
+Made with ☕ by [@darwinbatres](https://x.com/darwinbatres)

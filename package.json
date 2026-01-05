@@ -1,7 +1,7 @@
 {
-  "name": "base64-viewer",
-  "version": "1.0.0",
-  "description": "Decode, preview, and download base64 encoded documents",
+  "name": "base64-utils",
+  "version": "1.1.0",
+  "description": "Encode, decode, and preview base64 files. Supports PDF, images, video, audio, JSON, XML, HTML, and text.",
   "author": "Darwin Batres",
   "license": "MIT",
   "repository": {
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@radix-ui/react-slot": "1.1.1",
+    "@radix-ui/react-tabs": "^1.1.13",
     "@vercel/analytics": "1.3.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",

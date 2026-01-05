@@ -18,11 +18,12 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Base64 Viewer",
+  title: "Base64 Utils",
   description:
-    "Decode, preview, and download base64 encoded documents. Supports PDF, images, video, audio, JSON, XML, HTML, and text.",
+    "Encode, decode, and preview base64 files. Supports PDF, images, video, audio, JSON, XML, HTML, and text.",
   keywords: [
     "base64",
+    "encoder",
     "decoder",
     "viewer",
     "pdf",
@@ -32,21 +33,22 @@ export const metadata: Metadata = {
     "json",
     "document",
     "preview",
+    "convert",
   ],
-  authors: [{ name: "Base64 Viewer" }],
-  creator: "Base64 Viewer",
+  authors: [{ name: "Base64 Utils" }],
+  creator: "Base64 Utils",
   metadataBase: new URL("https://base64viewer.app"),
   openGraph: {
     type: "website",
     locale: "en_US",
-    title: "Base64 Viewer",
-    description: "Decode, preview, and download base64 encoded documents",
-    siteName: "Base64 Viewer",
+    title: "Base64 Utils",
+    description: "Encode, decode, and preview base64 files",
+    siteName: "Base64 Utils",
   },
   twitter: {
     card: "summary",
-    title: "Base64 Viewer",
-    description: "Decode, preview, and download base64 encoded documents",
+    title: "Base64 Utils",
+    description: "Encode, decode, and preview base64 files",
   },
   icons: {
     icon: [
