@@ -214,6 +214,9 @@ function FullscreenModal({
   return createPortal(modalContent, document.body);
 }
 
+/** Points to millimeters conversion factor (1 pt = 25.4/72 mm) */
+const PT_TO_MM = 25.4 / 72;
+
 /** Coordinate overlay component for PDF viewer */
 function CoordinateOverlay({
   coordinates,
@@ -238,82 +241,174 @@ function CoordinateOverlay({
   // Bottom offset = distance from bottom edge (same as pdfY)
   const fromBottom = coordinates.pdfY;
 
+  // Millimeter conversions
+  const pdfXmm = coordinates.pdfX * PT_TO_MM;
+  const pdfYmm = coordinates.pdfY * PT_TO_MM;
+  const fromLeftMm = fromLeft * PT_TO_MM;
+  const fromRightMm = fromRight * PT_TO_MM;
+  const fromTopMm = fromTop * PT_TO_MM;
+  const fromBottomMm = fromBottom * PT_TO_MM;
+  const pageWidthMm = coordinates.pageWidth * PT_TO_MM;
+  const pageHeightMm = coordinates.pageHeight * PT_TO_MM;
+
   return (
     <div
-      className="absolute bottom-3 left-3 flex flex-col gap-1.5 px-3 py-2.5 bg-background/95 backdrop-blur-sm border border-border rounded-lg shadow-lg text-xs font-mono tabular-nums select-none pointer-events-none z-10"
+      className="absolute bottom-3 left-3 flex gap-3 bg-background/95 backdrop-blur-sm border border-border rounded-lg shadow-lg text-xs font-mono tabular-nums select-none pointer-events-none z-10"
       aria-live="polite"
       aria-atomic="true"
     >
-      {/* PDF coordinates row (origin bottom-left) */}
-      <div className="flex items-center gap-2">
-        <Crosshair
-          className="h-3.5 w-3.5 text-muted-foreground shrink-0"
-          aria-hidden="true"
-        />
-        <div className="flex items-center gap-3">
-          <span className="text-muted-foreground">
-            X:{" "}
-            <span className="text-foreground font-medium">
-              {coordinates.pdfX.toFixed(1)}
+      {/* Points Section */}
+      <div className="flex flex-col gap-1.5 px-3 py-2.5 border-r border-border/50">
+        <div className="text-[10px] text-muted-foreground/70 font-semibold uppercase tracking-wide mb-0.5">
+          Points (pt)
+        </div>
+
+        {/* PDF coordinates row (origin bottom-left) */}
+        <div className="flex items-center gap-2">
+          <Crosshair
+            className="h-3.5 w-3.5 text-muted-foreground shrink-0"
+            aria-hidden="true"
+          />
+          <div className="flex items-center gap-3">
+            <span className="text-muted-foreground">
+              X:{" "}
+              <span className="text-foreground font-medium">
+                {coordinates.pdfX.toFixed(1)}
+              </span>
             </span>
-          </span>
-          <span className="text-muted-foreground">
-            Y:{" "}
-            <span className="text-foreground font-medium">
-              {coordinates.pdfY.toFixed(1)}
+            <span className="text-muted-foreground">
+              Y:{" "}
+              <span className="text-foreground font-medium">
+                {coordinates.pdfY.toFixed(1)}
+              </span>
             </span>
+            <span
+              className="text-muted-foreground/60 text-[10px]"
+              title="PDF coordinate system: origin at bottom-left corner, Y increases upward"
+            >
+              ↙
+            </span>
+          </div>
+        </div>
+
+        {/* Horizontal offset row: Left → Right */}
+        <div
+          className="flex items-center gap-2 text-[10px] text-muted-foreground border-t border-border/50 pt-1.5"
+          title="Horizontal offset: distance from left and right edges in points"
+        >
+          <span className="w-13 text-muted-foreground/70">← Left</span>
+          <span className="text-foreground font-medium">
+            {fromLeft.toFixed(1)}
           </span>
-          <span
-            className="text-muted-foreground/60 text-[10px]"
-            title="PDF coordinate system: origin at bottom-left corner, Y increases upward"
-          >
-            pt ↙
+          <span className="text-muted-foreground/50 px-1">|</span>
+          <span className="text-foreground font-medium">
+            {fromRight.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground/70">Right →</span>
+        </div>
+
+        {/* Vertical offset row: Top → Bottom */}
+        <div
+          className="flex items-center gap-2 text-[10px] text-muted-foreground"
+          title="Vertical offset: distance from top and bottom edges in points"
+        >
+          <span className="w-13 text-muted-foreground/70">↑ Top</span>
+          <span className="text-foreground font-medium">
+            {fromTop.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground/50 px-1">|</span>
+          <span className="text-foreground font-medium">
+            {fromBottom.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground/70">Bottom ↓</span>
+        </div>
+
+        {/* Page info row */}
+        <div className="flex items-center gap-2 text-[10px] text-muted-foreground/70 border-t border-border/50 pt-1.5 mt-0.5">
+          <span>
+            Page: {coordinates.pageWidth.toFixed(0)} ×{" "}
+            {coordinates.pageHeight.toFixed(0)}
           </span>
         </div>
       </div>
 
-      {/* Horizontal offset row: Left → Right */}
-      <div
-        className="flex items-center gap-2 text-[10px] text-muted-foreground border-t border-border/50 pt-1.5"
-        title="Horizontal offset: distance from left and right edges"
-      >
-        <span className="w-13 text-muted-foreground/70">← Left</span>
-        <span className="text-foreground font-medium">
-          {fromLeft.toFixed(1)}
-        </span>
-        <span className="text-muted-foreground/50 px-1">|</span>
-        <span className="text-foreground font-medium">
-          {fromRight.toFixed(1)}
-        </span>
-        <span className="text-muted-foreground/70">Right →</span>
+      {/* Millimeters Section */}
+      <div className="flex flex-col gap-1.5 px-3 py-2.5">
+        <div className="text-[10px] text-muted-foreground/70 font-semibold uppercase tracking-wide mb-0.5">
+          Millimeters (mm)
+        </div>
+
+        {/* PDF coordinates row (origin bottom-left) */}
+        <div className="flex items-center gap-2">
+          <Crosshair
+            className="h-3.5 w-3.5 text-muted-foreground shrink-0"
+            aria-hidden="true"
+          />
+          <div className="flex items-center gap-3">
+            <span className="text-muted-foreground">
+              X:{" "}
+              <span className="text-foreground font-medium">
+                {pdfXmm.toFixed(1)}
+              </span>
+            </span>
+            <span className="text-muted-foreground">
+              Y:{" "}
+              <span className="text-foreground font-medium">
+                {pdfYmm.toFixed(1)}
+              </span>
+            </span>
+            <span
+              className="text-muted-foreground/60 text-[10px]"
+              title="PDF coordinate system: origin at bottom-left corner, Y increases upward"
+            >
+              ↙
+            </span>
+          </div>
+        </div>
+
+        {/* Horizontal offset row: Left → Right */}
+        <div
+          className="flex items-center gap-2 text-[10px] text-muted-foreground border-t border-border/50 pt-1.5"
+          title="Horizontal offset: distance from left and right edges in millimeters"
+        >
+          <span className="w-13 text-muted-foreground/70">← Left</span>
+          <span className="text-foreground font-medium">
+            {fromLeftMm.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground/50 px-1">|</span>
+          <span className="text-foreground font-medium">
+            {fromRightMm.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground/70">Right →</span>
+        </div>
+
+        {/* Vertical offset row: Top → Bottom */}
+        <div
+          className="flex items-center gap-2 text-[10px] text-muted-foreground"
+          title="Vertical offset: distance from top and bottom edges in millimeters"
+        >
+          <span className="w-13 text-muted-foreground/70">↑ Top</span>
+          <span className="text-foreground font-medium">
+            {fromTopMm.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground/50 px-1">|</span>
+          <span className="text-foreground font-medium">
+            {fromBottomMm.toFixed(1)}
+          </span>
+          <span className="text-muted-foreground/70">Bottom ↓</span>
+        </div>
+
+        {/* Page info row */}
+        <div className="flex items-center gap-2 text-[10px] text-muted-foreground/70 border-t border-border/50 pt-1.5 mt-0.5">
+          <span>
+            Page: {pageWidthMm.toFixed(0)} × {pageHeightMm.toFixed(0)}
+          </span>
+        </div>
       </div>
 
-      {/* Vertical offset row: Top → Bottom */}
-      <div
-        className="flex items-center gap-2 text-[10px] text-muted-foreground"
-        title="Vertical offset: distance from top and bottom edges"
-      >
-        <span className="w-13 text-muted-foreground/70">↑ Top</span>
-        <span className="text-foreground font-medium">
-          {fromTop.toFixed(1)}
-        </span>
-        <span className="text-muted-foreground/50 px-1">|</span>
-        <span className="text-foreground font-medium">
-          {fromBottom.toFixed(1)}
-        </span>
-        <span className="text-muted-foreground/70">Bottom ↓</span>
-      </div>
-
-      {/* Page info row - helps validate coordinates */}
-      <div className="flex items-center gap-2 text-[10px] text-muted-foreground/70 border-t border-border/50 pt-1.5 mt-0.5">
-        <span>
-          Page: {coordinates.pageWidth.toFixed(0)} ×{" "}
-          {coordinates.pageHeight.toFixed(0)} pt
-        </span>
-        <span className="text-muted-foreground/50">|</span>
-        <span>
-          Pos: {xPercent.toFixed(0)}%, {yPercent.toFixed(0)}%
-        </span>
+      {/* Position percentage - shared */}
+      <div className="absolute -bottom-6 left-0 text-[10px] text-muted-foreground/60 bg-background/80 px-2 py-0.5 rounded">
+        Position: {xPercent.toFixed(0)}%, {yPercent.toFixed(0)}%
       </div>
     </div>
   );
