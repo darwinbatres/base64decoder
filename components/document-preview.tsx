@@ -228,13 +228,23 @@ function CoordinateOverlay({
   const xPercent = (coordinates.pdfX / coordinates.pageWidth) * 100;
   const yPercent = (coordinates.pdfY / coordinates.pageHeight) * 100;
 
+  // Calculate offset from edges (industry standard: left/right, top/bottom)
+  // Left offset = distance from left edge (same as pdfX)
+  const fromLeft = coordinates.pdfX;
+  // Right offset = distance from right edge
+  const fromRight = coordinates.pageWidth - coordinates.pdfX;
+  // Top offset = distance from top edge (inverted Y since PDF origin is bottom-left)
+  const fromTop = coordinates.pageHeight - coordinates.pdfY;
+  // Bottom offset = distance from bottom edge (same as pdfY)
+  const fromBottom = coordinates.pdfY;
+
   return (
     <div
-      className="absolute bottom-3 left-3 flex flex-col gap-1 px-3 py-2 bg-background/95 backdrop-blur-sm border border-border rounded-lg shadow-lg text-xs font-mono tabular-nums select-none pointer-events-none z-10"
+      className="absolute bottom-3 left-3 flex flex-col gap-1.5 px-3 py-2.5 bg-background/95 backdrop-blur-sm border border-border rounded-lg shadow-lg text-xs font-mono tabular-nums select-none pointer-events-none z-10"
       aria-live="polite"
       aria-atomic="true"
     >
-      {/* Main coordinates row */}
+      {/* PDF coordinates row (origin bottom-left) */}
       <div className="flex items-center gap-2">
         <Crosshair
           className="h-3.5 w-3.5 text-muted-foreground shrink-0"
@@ -261,8 +271,41 @@ function CoordinateOverlay({
           </span>
         </div>
       </div>
+
+      {/* Horizontal offset row: Left → Right */}
+      <div
+        className="flex items-center gap-2 text-[10px] text-muted-foreground border-t border-border/50 pt-1.5"
+        title="Horizontal offset: distance from left and right edges"
+      >
+        <span className="w-13 text-muted-foreground/70">← Left</span>
+        <span className="text-foreground font-medium">
+          {fromLeft.toFixed(1)}
+        </span>
+        <span className="text-muted-foreground/50 px-1">|</span>
+        <span className="text-foreground font-medium">
+          {fromRight.toFixed(1)}
+        </span>
+        <span className="text-muted-foreground/70">Right →</span>
+      </div>
+
+      {/* Vertical offset row: Top → Bottom */}
+      <div
+        className="flex items-center gap-2 text-[10px] text-muted-foreground"
+        title="Vertical offset: distance from top and bottom edges"
+      >
+        <span className="w-13 text-muted-foreground/70">↑ Top</span>
+        <span className="text-foreground font-medium">
+          {fromTop.toFixed(1)}
+        </span>
+        <span className="text-muted-foreground/50 px-1">|</span>
+        <span className="text-foreground font-medium">
+          {fromBottom.toFixed(1)}
+        </span>
+        <span className="text-muted-foreground/70">Bottom ↓</span>
+      </div>
+
       {/* Page info row - helps validate coordinates */}
-      <div className="flex items-center gap-2 text-[10px] text-muted-foreground/70 border-t border-border/50 pt-1 mt-0.5">
+      <div className="flex items-center gap-2 text-[10px] text-muted-foreground/70 border-t border-border/50 pt-1.5 mt-0.5">
         <span>
           Page: {coordinates.pageWidth.toFixed(0)} ×{" "}
           {coordinates.pageHeight.toFixed(0)} pt
