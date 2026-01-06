@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Github } from "lucide-react";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -95,6 +96,19 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           {children}
+
+          {/* GitHub Ribbon - Vertical Left Side */}
+          <a
+            href="https://github.com/darwinbatres/base64decoder"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="fixed left-0 bottom-8 z-50 flex items-center gap-2 px-2.5 py-3 text-xs font-medium bg-neutral-900 dark:bg-neutral-100 text-white dark:text-neutral-900 rounded-r-lg shadow-lg hover:translate-x-0.5 hover:shadow-xl transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 writing-mode-vertical"
+            style={{ writingMode: "vertical-rl" }}
+            aria-label="View source on GitHub"
+          >
+            <Github className="h-4 w-4 rotate-90" aria-hidden="true" />
+            <span>Open Source</span>
+          </a>
         </ThemeProvider>
         <Analytics />
       </body>
