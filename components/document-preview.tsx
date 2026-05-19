@@ -15,6 +15,8 @@ import {
   Crosshair,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import DocxViewer from "./viewers/docx-viewer";
+import XlsxViewer from "./viewers/xlsx-viewer";
 
 // PDF.js library type (loaded from CDN)
 interface PdfjsLib {

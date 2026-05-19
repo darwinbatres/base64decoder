@@ -76,7 +76,7 @@ export function FileViewer() {
           onClear={handleClear}
           icon={Eye}
           title={isProcessing ? "Loading..." : "Drop a file to view"}
-          description="PDF, images, video, audio, text, JSON, and more"
+          description="PDF, Word, Excel, images, video, audio, and more"
           disabled={isProcessing}
           hasFile={!!file}
         />

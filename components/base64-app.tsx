@@ -113,7 +113,7 @@ export function Base64App() {
         {/* Footer */}
         <footer className="mt-12 sm:mt-16 pt-6 border-t border-border/50">
           <p className="text-xs text-muted-foreground/70 text-center">
-            Supports PDF, images, video, audio, JSON, XML, HTML, and text
+            Supports PDF, Word, Excel, Images, Video, Audio, JSON, XML, and Text
           </p>
         </footer>
       </div>

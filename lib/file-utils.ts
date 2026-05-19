@@ -88,6 +88,38 @@ export function detectMimeType(base64: string): { mime: string; ext: string } {
   // Check binary signatures
   for (const [signature, typeInfo] of Object.entries(MIME_SIGNATURES)) {
     if (base64.startsWith(signature)) {
+      // Special case for ZIP-based Office documents
+      if (typeInfo.mime === "application/zip") {
+        try {
+          // Decode a small portion to look for Office-specific strings
+          // We look at the first ~1.5KB of decoded data which usually contain the directory structure
+          const sliceEnd = Math.min(base64.length, 2500);
+          const alignedSliceEnd = sliceEnd - (sliceEnd % 4);
+          if (alignedSliceEnd > 0) {
+            const header = atob(base64.slice(0, alignedSliceEnd));
+            if (header.includes("word/")) {
+              return {
+                mime: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                ext: "docx",
+              };
+            }
+            if (header.includes("xl/")) {
+              return {
+                mime: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                ext: "xlsx",
+              };
+            }
+            if (header.includes("ppt/")) {
+              return {
+                mime: "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                ext: "pptx",
+              };
+            }
+          }
+        } catch {
+          // Fallback to generic zip if decoding fails
+        }
+      }
       return typeInfo;
     }
   }

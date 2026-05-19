@@ -7,6 +7,8 @@ import {
   FileAudio,
   File,
   FileArchive,
+  FileSpreadsheet,
+  Presentation,
   type LucideIcon,
 } from "lucide-react";
 
@@ -17,6 +19,12 @@ interface FileTypeIndicatorProps {
 
 const iconMap: Record<string, LucideIcon> = {
   pdf: FileText,
+  docx: FileText,
+  doc: FileText,
+  xlsx: FileSpreadsheet,
+  xls: FileSpreadsheet,
+  pptx: Presentation,
+  ppt: Presentation,
   png: FileImage,
   jpg: FileImage,
   jpeg: FileImage,
