@@ -14,6 +14,37 @@ const STORAGE_KEYS = {
 // Export keys for external access
 export type StorageKey = keyof typeof STORAGE_KEYS;
 
+// Common MIME to Extension mapping
+export const MIME_TO_EXT: Record<string, string> = {
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document": "docx",
+  "application/msword": "doc",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+  "application/vnd.ms-excel": "xls",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation": "pptx",
+  "application/vnd.ms-powerpoint": "ppt",
+  "application/pdf": "pdf",
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/gif": "gif",
+  "image/webp": "webp",
+  "image/svg+xml": "svg",
+  "audio/mpeg": "mp3",
+  "audio/wav": "wav",
+  "audio/ogg": "ogg",
+  "video/mp4": "mp4",
+  "video/webm": "webm",
+  "application/zip": "zip",
+  "application/x-zip-compressed": "zip",
+  "application/json": "json",
+  "application/xml": "xml",
+  "text/plain": "txt",
+  "text/html": "html",
+  "text/css": "css",
+  "text/javascript": "js",
+  "application/javascript": "js",
+  "application/rtf": "rtf",
+};
+
 // MIME type signatures for detection
 export const MIME_SIGNATURES: Record<string, { mime: string; ext: string }> = {
   JVBERi0: { mime: "application/pdf", ext: "pdf" },
@@ -21,9 +52,10 @@ export const MIME_SIGNATURES: Record<string, { mime: string; ext: string }> = {
   "/9j/": { mime: "image/jpeg", ext: "jpg" },
   R0lGODlh: { mime: "image/gif", ext: "gif" },
   R0lGODdh: { mime: "image/gif", ext: "gif" },
-  UEsDBBQA: { mime: "application/zip", ext: "zip" },
+  UEsDBBQA: { mime: "application/zip", ext: "zip" }, // Note: docx/xlsx/pptx are also zips
   UEsFBgA: { mime: "application/zip", ext: "zip" },
   PK: { mime: "application/zip", ext: "zip" },
+  "0M8R4KGxGuE": { mime: "application/msword", ext: "doc" }, // Legacy Office (doc, xls, ppt)
   AAAA: { mime: "video/mp4", ext: "mp4" },
   GkXfo: { mime: "video/webm", ext: "webm" },
   Qk0: { mime: "image/bmp", ext: "bmp" },
@@ -48,7 +80,8 @@ export function detectMimeType(base64: string): { mime: string; ext: string } {
   const dataUriMatch = base64.match(/^data:([^;]+);base64,/);
   if (dataUriMatch) {
     const mime = dataUriMatch[1];
-    const ext = mime.split("/")[1]?.replace(/[^a-z0-9]/gi, "") || "bin";
+    // Use proper mapping or fallback to generic extraction
+    const ext = MIME_TO_EXT[mime] || mime.split("/")[1]?.replace(/[^a-z0-9]/gi, "") || "bin";
     return { mime, ext };
   }
 

@@ -794,6 +794,35 @@ export function DocumentPreview({ document }: DocumentPreviewProps) {
     return <PDFViewerWithFullscreen data={data} />;
   }
 
+  // Word Document preview
+  if (
+    document.extension === "docx" || 
+    mimeType === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+    mimeType === "application/msword" // Note: mammoth strictly supports docx, but we route here to try or fail gracefully
+  ) {
+    // Mammoth only supports docx, so we add a check
+    if (document.extension === "doc") {
+        return (
+          <div className="flex flex-col items-center justify-center rounded-lg border border-border bg-muted/30 p-16 text-center">
+            <FileQuestion className="h-8 w-8 text-muted-foreground mb-3" />
+            <p className="text-sm text-muted-foreground">Legacy .doc format rendering is not supported.</p>
+            <p className="text-xs text-muted-foreground/70 mt-1">Please download the file or convert it to .docx</p>
+          </div>
+        );
+    }
+    return <DocxViewer data={data} />;
+  }
+
+  // Excel Document preview
+  if (
+    document.extension === "xlsx" || 
+    document.extension === "csv" ||
+    mimeType === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" ||
+    mimeType === "application/vnd.ms-excel"
+  ) {
+    return <XlsxViewer data={data} />;
+  }
+
   // Text-based content preview
   if (
     mimeType.startsWith("text/") ||
